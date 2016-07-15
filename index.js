@@ -18,15 +18,16 @@ app.use('/', (req, res) => {
     date = new Date()
   }
   var result = {}
+  result._source = {}
 
   if (Math.random() > PASS_PERCENTAGE) {
-    result.status = 'failed'
+    result._source.status = 'failed'
     if (last === 'passed') {
       id++
       date = new Date()
     }
   } else {
-    result.status = 'passed'
+    result._source.status = 'passed'
     if (last === 'failed') {
       id++
       date = new Date()
@@ -38,8 +39,9 @@ app.use('/', (req, res) => {
     date = new Date()
   }
 
-  result._id = id
-  result['@timestamp'] = date.toISOString()
+  result._id = id.toString()
+  result._source['test-ID'] = id.toString()
+  result._source['@timestamp'] = date.toISOString()
 
   object.hits.hits[0] = result
   last = result.status
